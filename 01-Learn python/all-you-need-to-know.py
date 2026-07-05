@@ -1,0 +1,95 @@
+# # print("Hello World!")
+
+# import math
+# is_prime = 10
+# print(is_prime)
+
+# message = """ Hi, I'm Hassaan
+# Hi! mom!
+# I'm from lahore Pakistan!
+# wow how nice you are!
+# you take the 3rd row and give your mom the 10th row?
+# how shit son you are!
+# how tall are you?
+# things that are in my mind that I have to do is:
+
+# 01- Start AI Engineering
+# 02- LFX preparation
+# 03- Upcoming Hackathon Project
+# 04- Portfolio
+# 05- Leetcode
+# 06- Observability work at OWASP Nest
+# 07- Upwork or Fiverr?
+# """
+
+# first_name = "Hassaan"
+# last_name = "Saleem"
+
+# print(f"{first_name} {last_name}")
+# print(len(first_name))
+# print(first_name[0:3])
+# print(first_name[:3])
+# print(first_name[0:-1])
+
+# """"String Methods"""
+
+# print(f"{first_name} {last_name}".lower())
+# course = "  python course"
+# print(course.title())
+
+# print(course.strip())  # remove the space -> lstrip() + rstrip()
+
+# print(course.find("Cou"))
+# print(course.replace("o", "i"))
+
+# print("Cou" in course)
+# print("swift" not in course)
+
+# x = 1 + 2j
+# print(x)
+
+# print(49/5)
+# print(10/3)  # it will give a float
+
+# print(10 // 3)  # want an integer ? use this.
+
+# y = -100.6
+# # y += 10
+# print(y)
+
+# print(round(y))
+# print(abs(y))
+
+# ------------------------------------
+# gx = int(input("Enter x: "))
+# print(gx + 5)
+
+# full_name = "Ahad Ali"
+# uni_name = "University of Education"
+
+# if full_name and uni_name:
+#     print("Eligible for scholarship")
+# elif full_name or uni_name:
+#     print("not eligible")
+# else:
+#     print("try again!")
+
+
+# for num in range(1, 10, 2):
+#     print("Attempt", num, (num) * "*")
+
+
+def check_prime(num):
+
+    if (num < 2):
+        print("Not Prime")
+        return
+    for i in range(2, (num // 2 + 1)):
+        if (num % i == 0):
+            print("Not Prime")
+            return
+
+    print("Prime Number")
+
+
+check_prime(4)
