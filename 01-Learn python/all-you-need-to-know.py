@@ -79,17 +79,48 @@
 #     print("Attempt", num, (num) * "*")
 
 
-def check_prime(num):
+# def check_prime(num):
 
-    if (num < 2):
-        print("Not Prime")
-        return
-    for i in range(2, (num // 2 + 1)):
-        if (num % i == 0):
-            print("Not Prime")
-            return
+#     if (num < 2):
+#         print("Not Prime")
+#         return
+#     for i in range(2, (num // 2 + 1)):
+#         if (num % i == 0):
+#             print("Not Prime")
+#             return
 
-    print("Prime Number")
+#     print("Prime Number")
 
 
-check_prime(4)
+# check_prime(4)
+
+# Nested loop
+
+# for i in range(5):
+#     for j in range(5):
+#         print(f"({i}, {j})")
+
+# x = int(input("Enter val: "))
+# for num in range(x + 1):
+#     print(num * "*")
+
+
+# num = 100
+# while num > 0:
+#     print(num)
+#     num = num // 2
+
+# command = ""
+# while (command != "quit"):
+#     command = input(">")
+#     print("ECHO", command)
+
+# print("By Hassaan:")
+count = 0
+
+for num in range(1, 50):
+    if (num % 2 == 0):
+        count += 1
+        print(num)
+
+print(f"We have {count} even numbers.")
