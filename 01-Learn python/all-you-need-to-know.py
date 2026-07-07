@@ -116,11 +116,35 @@
 #     print("ECHO", command)
 
 # print("By Hassaan:")
-count = 0
+# count = 0
 
-for num in range(1, 50):
-    if (num % 2 == 0):
-        count += 1
-        print(num)
+# for num in range(1, 50):
+#     if (num % 2 == 0):
+#         count += 1
+#         print(num)
 
-print(f"We have {count} even numbers.")
+# print(f"We have {count} even numbers.")
+
+operations = ["--X", "X++", "X++"]
+
+x = 0
+for i in range(len(operations)):
+    print("Hi")
+    if (operations[i] == 'X++' or operations[i] == '++X'):
+        x += 1
+    if (operations[i] == '--X' or operations[i] == 'X--'):
+        x -= 1
+
+print(x)
+
+nums = [-4, -1, 0, 3, 10]
+
+
+def sortedSquares():
+    for i in range(len(nums)):
+        nums[i] = nums[i] * nums[i]
+    nums.sort()
+    print(nums)
+
+
+sortedSquares()
