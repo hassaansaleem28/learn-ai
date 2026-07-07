@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sorted Squares — Two-Pointer Animation</title>
+<style>
+:root{
+--font-sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+--font-mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+--radius:8px;
+--surface-2:#ffffff;--surface-1:#f6f5f2;--border:#e7e5de;--border-strong:#cfccc2;
+--text-primary:#1f1e1c;--text-secondary:#6b6a64;--text-muted:#9a988f;
+--bg-accent:#E6F1FB;--border-accent:#85B7EB;--text-accent:#185FA5;
+--bg-warning:#FAEEDA;--border-warning:#EF9F27;--text-warning:#854F0B;
+--bg-success:#EAF3DE;--border-success:#97C459;--text-success:#3B6D11;
+--bg-pro:#EEEDFE;--border-pro:#AFA9EC;--text-pro:#3C3489;
+--bg-danger:#FCEBEB;--text-danger:#A32D2D;
+}
+*{box-sizing:border-box;}
+body{margin:0;padding:20px;background:var(--surface-2);color:var(--text-primary);font-family:var(--font-sans);}
+.tp-wrap{max-width:660px;margin:0 auto;}
+.tp-head{font-size:15px;font-weight:500;margin:0 0 14px;}
+button{font-family:inherit;font-size:14px;padding:6px 11px;border:0.5px solid var(--border-strong);background:var(--surface-2);color:var(--text-primary);border-radius:var(--radius);cursor:pointer;transition:background .15s,transform .05s;}
+button:hover{background:var(--surface-1);}
+button:active{transform:scale(0.98);}
+input[type=text]{font-family:inherit;font-size:14px;height:34px;padding:0 10px;border:0.5px solid var(--border-strong);background:var(--surface-2);color:var(--text-primary);border-radius:var(--radius);}
+input[type=range]{accent-color:#185FA5;height:18px;cursor:pointer;vertical-align:middle;}
+.tp-controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px;}
+.tp-presets{display:flex;gap:6px;flex-wrap:wrap;}
+.tp-preset.active{border-color:var(--border-accent);color:var(--text-accent);}
+.tp-seg{display:flex;gap:6px;align-items:center;}
+.tp-warn{font-size:13px;border-radius:var(--radius);padding:8px 12px;margin-bottom:12px;}
+.tp-warn.is-error{color:var(--text-danger);background:var(--bg-danger);}
+.tp-warn.is-note{color:var(--text-warning);background:var(--bg-warning);}
+.tp-playbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.tp-speed{display:flex;align-items:center;gap:6px;margin-left:4px;}
+.tp-mini{font-size:12px;color:var(--text-secondary);}
+.tp-step-readout{margin-left:auto;font-size:13px;color:var(--text-secondary);font-variant-numeric:tabular-nums;}
+.tp-desc{font-size:14px;line-height:1.55;min-height:42px;background:var(--surface-1);border-radius:12px;padding:10px 14px;margin-bottom:16px;display:flex;align-items:center;}
+.tp-desc.flash{animation:tpFade .45s ease;}
+.tp-desc-icon{color:var(--text-success);font-weight:600;margin-right:6px;}
+@keyframes tpFade{from{opacity:.4;}to{opacity:1;}}
+.tp-vars{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
+.tp-var{background:var(--surface-2);border:0.5px solid var(--border);border-radius:var(--radius);padding:5px 12px;min-width:52px;text-align:center;transition:background .3s,border-color .3s;}
+.tp-var .k{font-size:11px;color:var(--text-secondary);font-family:var(--font-mono);}
+.tp-var .v{font-size:18px;font-weight:500;font-family:var(--font-mono);font-variant-numeric:tabular-nums;}
+.tp-var.flash{border-color:var(--border-accent);background:var(--bg-accent);}
+.tp-section-label{font-size:12px;color:var(--text-secondary);font-family:var(--font-mono);margin:0 0 8px;}
+.tp-array{position:relative;margin-bottom:4px;}
+.tp-cells{display:flex;gap:6px;}
+.tp-cell{display:flex;align-items:center;justify-content:center;border-radius:8px;border:0.5px solid var(--border);background:var(--surface-2);font-family:var(--font-mono);font-weight:500;font-variant-numeric:tabular-nums;transition:background .3s,border-color .3s,color .3s;}
+.tp-cell.empty{border-style:dashed;color:var(--text-muted);background:transparent;}
+.tp-cell.left{background:var(--bg-accent);border-color:var(--border-accent);color:var(--text-accent);}
+.tp-cell.right{background:var(--bg-warning);border-color:var(--border-warning);color:var(--text-warning);}
+.tp-cell.both{background:var(--surface-1);border-color:var(--border-strong);color:var(--text-primary);box-shadow:inset 0 0 0 2px var(--border-strong);}
+.tp-cell.filled{background:var(--bg-success);border-color:var(--border-success);color:var(--text-success);}
+.tp-cell.pulse{animation:tpPulse .6s ease;}
+@keyframes tpPulse{0%{transform:scale(1);}30%{transform:scale(1.14);}100%{transform:scale(1);}}
+.tp-ptr-layer{position:relative;height:34px;margin-top:6px;}
+.tp-ptr{position:absolute;top:0;left:0;display:flex;flex-direction:column;align-items:center;transform:translateX(-50%);transition:left .35s cubic-bezier(.4,0,.2,1),opacity .2s;}
+.tp-ptr.hidden{opacity:0;}
+.tp-ptr .gly{font-size:12px;line-height:1;}
+.tp-ptr .lbl{font-size:11px;font-weight:500;font-family:var(--font-mono);padding:1px 7px;border-radius:6px;margin-top:1px;}
+.tp-ptr-left{color:var(--text-accent);}
+.tp-ptr-left .lbl{background:var(--bg-accent);}
+.tp-ptr-right{color:var(--text-warning);}
+.tp-ptr-right .lbl{background:var(--bg-warning);}
+.tp-ptr-pos{color:var(--text-pro);}
+.tp-ptr-pos .lbl{background:var(--bg-pro);}
+.tp-compare{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:6px 0 18px;padding:12px 14px;background:var(--surface-1);border-radius:12px;}
+.tp-cmp-box{min-width:66px;text-align:center;padding:6px 10px;border-radius:var(--radius);border:0.5px solid var(--border);background:var(--surface-2);transition:background .3s,border-color .3s,color .3s;}
+.tp-cmp-box .k{font-size:11px;font-family:var(--font-mono);color:var(--text-secondary);}
+.tp-cmp-box .v{font-size:18px;font-weight:500;font-family:var(--font-mono);font-variant-numeric:tabular-nums;}
+.tp-cmp-box.leftc{border-color:var(--border-accent);}
+.tp-cmp-box.rightc{border-color:var(--border-warning);}
+.tp-cmp-box.win{background:var(--bg-success);border-color:var(--border-success);color:var(--text-success);}
+.tp-op{font-size:19px;font-weight:500;font-family:var(--font-mono);color:var(--text-secondary);}
+.tp-decision{font-size:13px;font-weight:500;color:var(--text-primary);font-family:var(--font-mono);}
+.tp-code{font-family:var(--font-mono);font-size:13px;line-height:1.55;background:var(--surface-1);border-radius:12px;padding:10px 0;margin-top:6px;overflow:auto;}
+.tp-code .ln{display:flex;padding:1px 14px;border-left:3px solid transparent;transition:background .25s,border-color .25s;}
+.tp-code .ln.on{background:var(--bg-accent);border-left-color:var(--border-accent);}
+.tp-code .num{color:var(--text-muted);width:20px;flex:none;text-align:right;margin-right:12px;user-select:none;}
+.tp-code .txt{color:var(--text-primary);white-space:pre;}
+</style>
+</head>
+<body>
+<div class="tp-wrap">
+  <div class="tp-head">Two-pointer walkthrough — sorted squares</div>
+  <div class="tp-controls">
+    <div class="tp-presets" id="tpPresets"></div>
+    <div class="tp-seg">
+      <input id="tpInput" type="text" placeholder="-4, -1, 0, 3, 10" style="width:150px" aria-label="Custom sorted array" />
+      <button id="tpLoad">Load</button>
+    </div>
+  </div>
+  <div id="tpWarn" class="tp-warn" hidden></div>
+  <div class="tp-playbar">
+    <button id="tpReset" aria-label="Restart">&#8635;</button>
+    <button id="tpPrev" aria-label="Previous step">&#9198;</button>
+    <button id="tpPlay" aria-label="Play">&#9654;</button>
+    <button id="tpNext" aria-label="Next step">&#9197;</button>
+    <div class="tp-speed">
+      <span class="tp-mini">Speed</span>
+      <input id="tpSpeed" type="range" min="1" max="4" step="1" value="2" style="width:88px" aria-label="Playback speed" />
+      <span id="tpSpeedOut" class="tp-mini">1&times;</span>
+    </div>
+    <span id="tpStep" class="tp-step-readout"></span>
+  </div>
+  <div id="tpDesc" class="tp-desc"><span id="tpDescIcon" class="tp-desc-icon" hidden>&#10003;</span><span id="tpDescText"></span></div>
+  <div class="tp-vars">
+    <div class="tp-var" id="tpVn"><div class="k">n</div><div class="v">&ndash;</div></div>
+    <div class="tp-var" id="tpVleft"><div class="k">left</div><div class="v">&ndash;</div></div>
+    <div class="tp-var" id="tpVright"><div class="k">right</div><div class="v">&ndash;</div></div>
+    <div class="tp-var" id="tpVpos"><div class="k">pos</div><div class="v">&ndash;</div></div>
+  </div>
+  <p class="tp-section-label">nums &mdash; two pointers scan inward</p>
+  <div class="tp-array">
+    <div class="tp-cells" id="tpNumsCells"></div>
+    <div class="tp-ptr-layer" id="tpNumsPtrs"></div>
+  </div>
+  <div class="tp-compare">
+    <div class="tp-cmp-box leftc" id="tpCmpL"><div class="k">leftRes</div><div class="v">&ndash;</div></div>
+    <span class="tp-op">&gt;</span>
+    <div class="tp-cmp-box rightc" id="tpCmpR"><div class="k">rightRes</div><div class="v">&ndash;</div></div>
+    <span class="tp-op">?</span>
+    <span class="tp-decision" id="tpDecision">&hellip;</span>
+  </div>
+  <p class="tp-section-label">arr &mdash; filled from the back, largest first</p>
+  <div class="tp-array">
+    <div class="tp-cells" id="tpArrCells"></div>
+    <div class="tp-ptr-layer" id="tpArrPtrs"></div>
+  </div>
+  <div class="tp-code" id="tpCode">
+    <div class="ln" id="L1"><span class="num">1</span><span class="txt">vector&lt;int&gt; sortedSquares(vector&lt;int&gt;&amp; nums) {</span></div>
+    <div class="ln" id="L2"><span class="num">2</span><span class="txt">    int n = nums.size();</span></div>
+    <div class="ln" id="L3"><span class="num">3</span><span class="txt">    vector&lt;int&gt; arr(n);</span></div>
+    <div class="ln" id="L4"><span class="num">4</span><span class="txt">    int left = 0;</span></div>
+    <div class="ln" id="L5"><span class="num">5</span><span class="txt">    int right = n - 1;</span></div>
+    <div class="ln" id="L6"><span class="num">6</span><span class="txt">    int pos = n - 1;</span></div>
+    <div class="ln" id="L7"><span class="num">7</span><span class="txt">    while (left &lt;= right) {</span></div>
+    <div class="ln" id="L8"><span class="num">8</span><span class="txt">        int leftRes = nums[left] * nums[left];</span></div>
+    <div class="ln" id="L9"><span class="num">9</span><span class="txt">        int rightRes = nums[right] * nums[right];</span></div>
+    <div class="ln" id="L10"><span class="num">10</span><span class="txt">        if (leftRes &gt; rightRes) {</span></div>
+    <div class="ln" id="L11"><span class="num">11</span><span class="txt">            arr[pos--] = leftRes;</span></div>
+    <div class="ln" id="L12"><span class="num">12</span><span class="txt">            left++;</span></div>
+    <div class="ln" id="L13"><span class="num">13</span><span class="txt">        } else {</span></div>
+    <div class="ln" id="L14"><span class="num">14</span><span class="txt">            arr[pos--] = rightRes;</span></div>
+    <div class="ln" id="L15"><span class="num">15</span><span class="txt">            right--;</span></div>
+    <div class="ln" id="L16"><span class="num">16</span><span class="txt">        }</span></div>
+    <div class="ln" id="L17"><span class="num">17</span><span class="txt">    }</span></div>
+    <div class="ln" id="L18"><span class="num">18</span><span class="txt">    return arr;</span></div>
+    <div class="ln" id="L19"><span class="num">19</span><span class="txt">}</span></div>
+  </div>
+</div>
+<script>
+(function(){
+  var CELL_MAX=56,CELL_MIN=34,GAP=6;
+  var SPEED_DELAY={"1":1400,"2":850,"3":480,"4":280};
+  var SPEED_LABEL={"1":"0.5\u00d7","2":"1\u00d7","3":"2\u00d7","4":"3\u00d7"};
+  var PRESETS=[[-4,-1,0,3,10],[-5,-3,-2,-1],[1,2,3,6]];
+  var lineMap={init:["L2","L3","L4","L5","L6"],chk:["L7"],cmp:["L8","L9","L10"],ifT:["L11","L12"],ifF:["L14","L15"],ret:["L18"]};
+  var $=function(id){return document.getElementById(id);};
+  var presetsEl=$("tpPresets"),inputEl=$("tpInput"),warnEl=$("tpWarn");
+  var descText=$("tpDescText"),descIcon=$("tpDescIcon"),descEl=$("tpDesc");
+  var vN=$("tpVn"),vLeft=$("tpVleft"),vRight=$("tpVright"),vPos=$("tpVpos");
+  var cmpL=$("tpCmpL"),cmpR=$("tpCmpR"),decision=$("tpDecision");
+  var numsCellsWrap=$("tpNumsCells"),arrCellsWrap=$("tpArrCells");
+  var numsPtrWrap=$("tpNumsPtrs"),arrPtrWrap=$("tpArrPtrs");
+  var stepEl=$("tpStep"),playBtn=$("tpPlay"),speedEl=$("tpSpeed"),speedOut=$("tpSpeedOut");
+  var nums=[],frames=[],idx=0,last=null,playing=false,timer=null,cellW=CELL_MAX;
+  var numsEls=[],arrEls=[],pLeft,pRight,pPos;
+  function centerPx(i){return i*(cellW+GAP)+cellW/2;}
+  function buildFrames(a){
+    var n=a.length,fr=[],arr=new Array(n).fill(null);
+    var left=0,right=n-1,pos=n-1,g=0;
+    fr.push({phase:"init",left:left,right:right,pos:pos,lr:null,rr:null,arr:arr.slice(),key:"init",win:null,fill:null,
+      desc:"Set up: n = "+n+", left = 0, right = "+(n-1)+", pos = "+(n-1)+". Result starts empty."});
+    while(left<=right && g++<2000){
+      fr.push({phase:"chk",left:left,right:right,pos:pos,lr:null,rr:null,arr:arr.slice(),key:"chk",win:null,fill:null,
+        desc:"left ("+left+") \u2264 right ("+right+")? Yes \u2014 run the loop body."});
+      var lr=a[left]*a[left],rr=a[right]*a[right],lw=lr>rr;
+      fr.push({phase:"cmp",left:left,right:right,pos:pos,lr:lr,rr:rr,arr:arr.slice(),key:"cmp",win:lw?"L":"R",fill:null,
+        desc:a[left]+"\u00b2 = "+lr+",  "+a[right]+"\u00b2 = "+rr+".  "+lr+" > "+rr+" is "+(lw?"true":"false")+" \u2192 take "+(lw?"leftRes":"rightRes")+"."});
+      var op=pos,placed=lw?lr:rr;
+      arr[pos]=placed;pos--;
+      if(lw)left++;else right--;
+      fr.push({phase:"place",left:left,right:right,pos:pos,lr:lr,rr:rr,arr:arr.slice(),key:lw?"ifT":"ifF",win:lw?"L":"R",fill:op,
+        desc:"Write "+placed+" into arr["+op+"].  "+(lw?"left \u2192 "+left:"right \u2192 "+right)+",  pos \u2192 "+pos+"."});
+    }
+    fr.push({phase:"done",left:left,right:right,pos:pos,lr:null,rr:null,arr:arr.slice(),key:"ret",win:null,fill:null,
+      desc:"left ("+left+") \u2264 right ("+right+")? No \u2014 loop ends. Return the sorted squares."});
+    return fr;
+  }
+  function mkPtr(label,cls){var d=document.createElement("div");d.className="tp-ptr "+cls;d.innerHTML='<span class="gly">\u25b2</span><span class="lbl">'+label+'</span>';return d;}
+  function layout(){
+    var n=nums.length;
+    cellW=Math.max(CELL_MIN,Math.min(CELL_MAX,Math.floor((540-(n-1)*GAP)/n)));
+    var fs=cellW<40?14:17;
+    numsCellsWrap.innerHTML="";arrCellsWrap.innerHTML="";numsEls=[];arrEls=[];
+    for(var i=0;i<n;i++){var c=document.createElement("div");c.className="tp-cell";c.style.width=cellW+"px";c.style.height="46px";c.style.fontSize=fs+"px";c.textContent=nums[i];numsCellsWrap.appendChild(c);numsEls.push(c);}
+    for(var j=0;j<n;j++){var e=document.createElement("div");e.className="tp-cell empty";e.style.width=cellW+"px";e.style.height="46px";e.style.fontSize=fs+"px";arrCellsWrap.appendChild(e);arrEls.push(e);}
+    var tot=n*cellW+(n-1)*GAP;
+    numsPtrWrap.style.width=tot+"px";arrPtrWrap.style.width=tot+"px";
+    numsPtrWrap.innerHTML="";arrPtrWrap.innerHTML="";
+    pLeft=mkPtr("left","tp-ptr-left");numsPtrWrap.appendChild(pLeft);
+    pRight=mkPtr("right","tp-ptr-right");numsPtrWrap.appendChild(pRight);
+    pPos=mkPtr("pos","tp-ptr-pos");arrPtrWrap.appendChild(pPos);
+  }
+  function flash(box){box.classList.remove("flash");void box.offsetWidth;box.classList.add("flash");setTimeout(function(){box.classList.remove("flash");},520);}
+  function setVar(box,val,doFlash){box.querySelector(".v").textContent=(val==null?"\u2013":val);if(doFlash)flash(box);}
+  function placePtr(el,index,off){if(index<0||index>=nums.length){el.classList.add("hidden");return;}el.classList.remove("hidden");el.style.left=(centerPx(index)+off)+"px";}
+  function render(){
+    var f=frames[idx];
+    descText.textContent=f.desc;
+    descIcon.hidden=f.phase!=="done";
+    descEl.classList.remove("flash");void descEl.offsetWidth;descEl.classList.add("flash");
+    setVar(vN,nums.length,false);
+    setVar(vLeft,f.left,last&&f.left!==last.left);
+    setVar(vRight,f.right,last&&f.right!==last.right);
+    setVar(vPos,f.pos,last&&f.pos!==last.pos);
+    cmpL.querySelector(".v").textContent=f.lr==null?"\u2013":f.lr;
+    cmpR.querySelector(".v").textContent=f.rr==null?"\u2013":f.rr;
+    cmpL.classList.remove("win");cmpR.classList.remove("win");
+    if(f.lr!=null&&f.win==="L")cmpL.classList.add("win");
+    if(f.rr!=null&&f.win==="R")cmpR.classList.add("win");
+    decision.textContent=f.lr==null?(f.phase==="done"?"done":"\u2026"):(f.lr>f.rr?"true":"false");
+    numsEls.forEach(function(el,i){
+      el.classList.remove("left","right","both");
+      var isL=i===f.left,isR=i===f.right;
+      if(isL&&isR)el.classList.add("both");else if(isL)el.classList.add("left");else if(isR)el.classList.add("right");
+    });
+    arrEls.forEach(function(el,i){
+      var v=f.arr[i];
+      if(v==null){el.classList.add("empty");el.classList.remove("filled");el.textContent="";}
+      else{el.classList.remove("empty");el.classList.add("filled");el.textContent=v;}
+    });
+    if(f.fill!=null&&(!last||last.arr[f.fill]==null)){var cell=arrEls[f.fill];if(cell){cell.classList.remove("pulse");void cell.offsetWidth;cell.classList.add("pulse");}}
+    var same=f.left===f.right;
+    placePtr(pLeft,f.left,same?-14:0);
+    placePtr(pRight,f.right,same?14:0);
+    placePtr(pPos,f.pos,0);
+    var lns=document.querySelectorAll("#tpCode .ln");
+    for(var k=0;k<lns.length;k++)lns[k].classList.remove("on");
+    (lineMap[f.key]||[]).forEach(function(id){var el=$(id);if(el)el.classList.add("on");});
+    stepEl.textContent="Step "+(idx+1)+" / "+frames.length;
+    setPlayIcon();
+    last=f;
+  }
+  function setPlayIcon(){playBtn.innerHTML=playing?"&#10074;&#10074;":"&#9654;";playBtn.setAttribute("aria-label",playing?"Pause":"Play");}
+  function dly(){return SPEED_DELAY[speedEl.value];}
+  function schedule(){clearTimeout(timer);timer=setTimeout(tick,dly());}
+  function tick(){if(idx<frames.length-1){idx++;render();schedule();}else{pause();}}
+  function play(){if(idx>=frames.length-1){idx=0;render();}playing=true;setPlayIcon();schedule();}
+  function pause(){playing=false;clearTimeout(timer);setPlayIcon();}
+  function parseInput(str){
+    var parts=str.split(/[\s,]+/).filter(function(s){return s.length;});
+    var out=[];
+    for(var i=0;i<parts.length;i++){
+      if(!/^-?\d+$/.test(parts[i]))return{err:"Use whole numbers only, e.g. -4, -1, 0, 3, 10"};
+      var v=parseInt(parts[i],10);
+      if(v<-99||v>99)return{err:"Keep values between -99 and 99 so squares fit."};
+      out.push(v);
+    }
+    if(out.length<1)return{err:"Enter at least one number."};
+    if(out.length>12)return{err:"Keep it to 12 numbers or fewer."};
+    var sorted=out.every(function(v,i){return i===0||out[i-1]<=v;});
+    return{vals:out,sorted:sorted};
+  }
+  function showWarn(msg,kind){warnEl.hidden=false;warnEl.textContent=msg;warnEl.className="tp-warn "+(kind==="error"?"is-error":"is-note");}
+  function hideWarn(){warnEl.hidden=true;}
+  function markActive(){var key=nums.join(",");Array.prototype.forEach.call(presetsEl.children,function(b){b.classList.toggle("active",b.getAttribute("data-k")===key);});}
+  function load(){
+    var res=parseInput(inputEl.value);
+    if(res.err){showWarn(res.err,"error");return;}
+    nums=res.vals;
+    if(!res.sorted)showWarn("Heads up: this input isn't sorted ascending, so arr won't end up fully sorted \u2014 but you can still watch the pointers work.","note");
+    else hideWarn();
+    layout();frames=buildFrames(nums);idx=0;last=null;pause();markActive();render();
+  }
+  function buildPresets(){
+    presetsEl.innerHTML="";
+    PRESETS.forEach(function(p){
+      var b=document.createElement("button");b.className="tp-preset";b.textContent="["+p.join(", ")+"]";b.setAttribute("data-k",p.join(","));
+      b.addEventListener("click",function(){inputEl.value=p.join(", ");load();});
+      presetsEl.appendChild(b);
+    });
+  }
+  $("tpNext").onclick=function(){pause();if(idx<frames.length-1){idx++;render();}};
+  $("tpPrev").onclick=function(){pause();if(idx>0){idx--;render();}};
+  $("tpReset").onclick=function(){pause();idx=0;render();};
+  playBtn.onclick=function(){playing?pause():play();};
+  $("tpLoad").onclick=load;
+  inputEl.addEventListener("keydown",function(e){if(e.key==="Enter")load();});
+  speedEl.addEventListener("input",function(){speedOut.textContent=SPEED_LABEL[speedEl.value];if(playing)schedule();});
+  inputEl.value="-4, -1, 0, 3, 10";
+  buildPresets();
+  load();
+})();
+</script>
+</body>
+</html>
