@@ -125,26 +125,62 @@
 
 # print(f"We have {count} even numbers.")
 
-operations = ["--X", "X++", "X++"]
+# ---------------------------------------------------------------------------------
 
-x = 0
-for i in range(len(operations)):
-    print("Hi")
-    if (operations[i] == 'X++' or operations[i] == '++X'):
-        x += 1
-    if (operations[i] == '--X' or operations[i] == 'X--'):
-        x -= 1
+# operations = ["--X", "X++", "X++"]
 
-print(x)
+# x = 0
+# for i in range(len(operations)):
+#     print("Hi")
+#     if (operations[i] == 'X++' or operations[i] == '++X'):
+#         x += 1
+#     if (operations[i] == '--X' or operations[i] == 'X--'):
+#         x -= 1
 
-nums = [-4, -1, 0, 3, 10]
+# print(x)
+
+# nums = [-4, -1, 0, 3, 10]
+
+# # ---------------------------------------------------------------------------------
 
 
-def sortedSquares():
+# def sortedSquares():
+#     for i in range(len(nums)):
+#         nums[i] = nums[i] * nums[i]
+#     nums.sort()
+#     print(nums)
+
+
+# sortedSquares()
+
+# # ---------------------------------------------------------------------------------
+
+# nums = [1, 2, 3]
+
+
+# def getConcatenation():
+#     n = len(nums)
+#     arr = [0] * (n*2)
+#     for i in range(len(nums)):
+#         arr[i] = nums[i]
+#         arr[i+n] = nums[i]
+#     print(arr)
+
+
+# getConcatenation()
+
+# # ---------------------------------------------------------------------------------
+
+nums = [1, 1, 1, 1]
+
+
+def numIdenticalPairs():
+    count = 0
     for i in range(len(nums)):
-        nums[i] = nums[i] * nums[i]
-    nums.sort()
-    print(nums)
+        for j in range(len(nums)):
+            if (nums[i] == nums[j] and i < j):
+                count += 1
+    print(count)
 
 
-sortedSquares()
+numIdenticalPairs()
