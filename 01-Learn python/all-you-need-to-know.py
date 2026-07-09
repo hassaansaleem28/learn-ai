@@ -169,18 +169,52 @@
 
 # getConcatenation()
 
-# # ---------------------------------------------------------------------------------
+# # # ---------------------------------------------------------------------------------
 
-nums = [1, 1, 1, 1]
+# nums = [1, 1, 1, 1]
 
 
-def numIdenticalPairs():
-    count = 0
+# def numIdenticalPairs():
+#     count = 0
+#     for i in range(len(nums)):
+#         for j in range(len(nums)):
+#             if (nums[i] == nums[j] and i < j):
+#                 count += 1
+#     print(count)
+
+
+# numIdenticalPairs()
+
+# # # ---------------------------------------------------------------------------------
+
+# nums = [2, 3, 4, 5, 6, 7]
+# n = 3
+
+
+# def shuffle():
+#     arr = [0] * len(nums)
+#     for i in range(0, len(nums), 2):
+#         arr[i] = nums[i // 2]
+#         arr[i+1] = nums[n + i // 2]
+#     print(arr)
+
+
+# shuffle()
+
+# ---------------------------------------------------------------------------------
+
+nums = [0, 1, 0, 3, 12]
+
+
+def moveZeroes():
+    point = 0
     for i in range(len(nums)):
-        for j in range(len(nums)):
-            if (nums[i] == nums[j] and i < j):
-                count += 1
-    print(count)
+        if (nums[i] != 0):
+            nums[point] = nums[i]
+            if (i != point):
+                nums[i] = 0
+            point += 1
+    print(nums)
 
 
-numIdenticalPairs()
+moveZeroes()
