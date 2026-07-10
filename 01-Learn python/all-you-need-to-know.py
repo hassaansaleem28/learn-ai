@@ -203,18 +203,53 @@
 
 # ---------------------------------------------------------------------------------
 
-nums = [0, 1, 0, 3, 12]
+# nums = [0, 1, 0, 3, 12]
 
 
-def moveZeroes():
-    point = 0
-    for i in range(len(nums)):
-        if (nums[i] != 0):
-            nums[point] = nums[i]
-            if (i != point):
-                nums[i] = 0
-            point += 1
-    print(nums)
+# def moveZeroes():
+#     point = 0
+#     for i in range(len(nums)):
+#         if (nums[i] != 0):
+#             nums[point] = nums[i]
+#             if (i != point):
+#                 nums[i] = 0
+#             point += 1
+#     print(nums)
 
 
-moveZeroes()
+# moveZeroes()
+
+
+# ---------------------------------------------------------------------------------
+# nums = [1, 1, 0, 1, 1, 1]
+
+
+# def findMaxConsecutiveOnes():
+#     numofOnes = 0
+#     maxVal = 0
+
+#     for i in range(len(nums)):
+#         if (nums[i] == 1):
+#             numofOnes += 1
+#             maxVal = max(numofOnes, maxVal)
+#         else:
+#             numofOnes = 0
+#     print(maxVal)
+
+
+# findMaxConsecutiveOnes()
+
+# # ---------------------------------------------------------------------------------
+
+# nums = [1, 2, 3, 4, 5, 6, 7]s
+
+
+# def rotate(k):
+#     k = k % len(nums)
+#     nums.reverse()
+#     nums[:k] = nums[:k][::-1]
+#     nums[k:] = nums[k:][::-1]
+#     print(nums)
+
+
+# rotate(3)
