@@ -253,3 +253,37 @@
 
 
 # rotate(3)
+
+# -----------------------------------------------------------------------
+
+# jewels = "aA"
+# stones = "aAAbbbb"
+
+
+# def numJewelsInStones():
+#     count = 0
+#     for i in range(len(stones)):
+#         for j in range(len(jewels)):
+#             if (jewels[j] == stones[i]):
+#                 count += 1
+#                 break
+#     print(count)
+
+
+# numJewelsInStones()
+
+# -----------------------------------------------------------------------
+
+# nums = [1, 2, 3, 1]
+
+
+# def containsDuplicate():
+#     seen = set()
+#     for i in nums:
+#         if i in seen:
+#             return True
+#         seen.add(i)
+#     return False
+
+
+# print(containsDuplicate())
