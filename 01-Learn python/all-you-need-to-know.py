@@ -287,3 +287,41 @@
 
 
 # print(containsDuplicate())
+
+
+# --------------------------------------------------------------------------
+
+
+# s = ["h", "e", "l", "l", "o"]
+# left = 0
+# right = len(s) - 1
+# temp = ""
+# while (left <= right):
+#     temp = s[left]
+#     s[left] = s[right]
+#     s[right] = temp
+#     left += 1
+#     right -= 1
+
+# print(s)
+
+
+# --------------------------------------------------------------------------
+
+
+# word1 = "abcd"
+# word2 = "pq"
+
+# ans = ""
+
+# for i in range(len(word2) if len(word1) > len(word2) else len(word1)):
+#     ans += word1[i]
+#     ans += word2[i]
+
+# if (len(word1) > len(word2)):
+#     ans += word1[len(word2):]
+# if (len(word1) < len(word2)):
+#     ans += word2[len(word1):]
+
+
+# print(ans)
