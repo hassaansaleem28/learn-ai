@@ -348,3 +348,31 @@
 
 
 # -------------------------------------------------------------------------------------
+
+# s = "icecream"
+# t = "acecreim"
+
+
+# def isAnagram():
+#     if (len(s) != len(t)):
+#         print(False)
+#     arr = [0] * 26
+
+#     for i in range(len(s)):
+#         arr[ord(s[i]) - ord("a")] += 1
+#         arr[ord(t[i]) - ord("a")] -= 1
+
+#     for i in arr:
+#         if (i != 0):
+#             print(False)
+
+#     print(True)
+
+
+# isAnagram()
+
+# -------------------------------------------------------------------------------------
+
+s = "Icecream"
+
+print(s.lower())
