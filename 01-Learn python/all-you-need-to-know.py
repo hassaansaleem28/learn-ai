@@ -373,6 +373,34 @@
 
 # -------------------------------------------------------------------------------------
 
-s = "Icecream"
+# s = "A man, a plan, a canal: Panama"
 
-print(s.lower())
+
+# def isPalindrome(s):
+#     def toLower(c):
+#         if 'A' <= c <= 'Z':
+#             return chr(ord(c) + 32)
+#         return c
+
+#     def isAlNum(c):
+#         return ('a' <= c <= 'z' or
+#                 'A' <= c <= 'Z' or
+#                 '0' <= c <= '9')
+
+#     left = 0
+#     right = len(s) - 1
+
+#     while (left < right):
+#         if (isAlNum(s[left]) and isAlNum(s[right])):
+#             if (toLower(s[left]) != toLower(s[right])):
+#                 return False
+#             left += 1
+#             right -= 1
+#         if (not isAlNum(s[left])):
+#             left += 1
+#         if (not isAlNum(s[right])):
+#             right -= 1
+#     return True
+
+
+# print(isPalindrome(s))
