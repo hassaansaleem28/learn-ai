@@ -469,3 +469,23 @@
 # Two Pointers
 
 # ------------------------------------------------------------------------------------
+
+# two sum:
+
+# nums = [3, 2, 4]
+# target = 6
+
+# indexed = sorted((x, i) for i, x in enumerate(nums))
+
+# left = 0
+# right = len(nums) - 1
+
+# while left < right:
+#     total = indexed[left][0] + indexed[right][0]
+#     if total == target:
+#         print([indexed[left][1], indexed[right][1]])
+#         break
+#     elif total < target:
+#         left += 1
+#     else:
+#         right -= 1
